@@ -41,7 +41,8 @@
         precision: Float = 1,
         perceptualPrecision: Float = 1,
         layout: SwiftUISnapshotLayout = .sizeThatFits,
-        traits: UITraitCollection = .init()
+        traits: UITraitCollection = .init(),
+        delay: Double? = nil
       )
         -> Snapshotting
       {
@@ -84,7 +85,8 @@
             drawHierarchyInKeyWindow: drawHierarchyInKeyWindow,
             traits: traits,
             view: controller.view,
-            viewController: controller
+            viewController: controller,
+            delay: delay
           )
         }
       }
