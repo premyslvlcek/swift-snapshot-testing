@@ -20,7 +20,7 @@ extension Async {
     return Async<Value> { callback in
       run { value in
         
-        let expectation = XCTestExpectation(description: "Wait")
+        let expectation = XCTestExpectation(description: "delay")
         DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval) {
           expectation.fulfill()
         }
