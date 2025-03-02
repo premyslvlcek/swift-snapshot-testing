@@ -989,18 +989,28 @@
       return
         (view.snapshot
         ?? Async { callback in
-          addImagesForRenderedViews(view).sequence().delay(by: delay).run { views in
-            callback(
-              renderer(bounds: view.bounds, for: traits).image { ctx in
-                if drawHierarchyInKeyWindow {
-                  view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
-                } else {
-                  view.layer.render(in: ctx.cgContext)
+          addImagesForRenderedViews(view).sequence().run { views in
+            let completion = {
+              callback(
+                renderer(bounds: view.bounds, for: traits).image { ctx in
+                  if drawHierarchyInKeyWindow {
+                    view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+                  } else {
+                    view.layer.render(in: ctx.cgContext)
+                  }
                 }
-              }
-            )
-            views.forEach { $0.removeFromSuperview() }
-            view.frame = initialFrame
+              )
+              views.forEach { $0.removeFromSuperview() }
+              view.frame = initialFrame
+            }
+            
+            if let delay = delay {
+                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+                     completion()
+                 }
+            } else {
+              completion()
+            }
           }
         }).map {
           dispose()
