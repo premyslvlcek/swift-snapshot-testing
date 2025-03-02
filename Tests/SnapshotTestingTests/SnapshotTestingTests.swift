@@ -1308,6 +1308,11 @@ final class SnapshotTestingTests: XCTestCase {
         of: view,
         as: .image(layout: .device(config: .iPhoneSe), traits: .init(userInterfaceStyle: .light)),
         named: "device")
+      
+      assertSnapshot(
+        of: view,
+        as: .image(layout: .device(config: .iPhoneSe), traits: .init(userInterfaceStyle: .light), delay: 1),
+        named: "delay")
     }
   #endif
 

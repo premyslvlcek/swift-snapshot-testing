@@ -989,7 +989,7 @@
       return
         (view.snapshot
         ?? Async { callback in
-          addImagesForRenderedViews(view).sequence().run { views in
+          addImagesForRenderedViews(view).sequence().delay(by: delay).run { views in
             let completion = {
               callback(
                 renderer(bounds: view.bounds, for: traits).image { ctx in
@@ -1004,13 +1004,7 @@
               view.frame = initialFrame
             }
             
-            if let delay = delay {
-                 DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                     completion()
-                 }
-            } else {
               completion()
-            }
           }
         }).map {
           dispose()
