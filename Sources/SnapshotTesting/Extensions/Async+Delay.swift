@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import XCTest
 
 extension Async {
   /// Delays Async `run` block
@@ -18,9 +19,14 @@ extension Async {
     
     return Async<Value> { callback in
       run { value in
+        
+        let expectation = XCTestExpectation(description: "Wait")
         DispatchQueue.main.asyncAfter(deadline: .now() + timeInterval) {
-          callback(value)
+          expectation.fulfill()
         }
+        _ = XCTWaiter.wait(for: [expectation], timeout: timeInterval + 1)
+        
+        callback(value)
       }
     }
   }
